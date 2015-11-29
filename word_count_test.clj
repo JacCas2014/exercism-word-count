@@ -3,7 +3,7 @@
             [wordcount :refer :all]
             [midje.sweet :refer :all]))
 
-(future-fact "count-one-word"
+(fact "count-one-word"
       (word-count "word") => {"word" 1})
 
 (future-fact "count-one-of-each"
