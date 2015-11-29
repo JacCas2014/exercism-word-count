@@ -1,31 +1,23 @@
 (ns word-count-test
   (:require [clojure.test :refer :all]
+            [wordcount :refer :all]
             [midje.sweet :refer :all]))
 
-(load-file "word_count.clj")
+(future-fact "count-one-word"
+      (word-count "word") => {"word" 1})
 
-(deftest count-one-word
-  (is (= {"word" 1}
-         (word-count/word-count "word"))))
+(future-fact "count-one-of-each"
+      (word-count "one of each") => {"one" 1 "of" 1 "each" 1})
 
-(deftest count-one-of-each
-  (is (= {"one" 1 "of" 1 "each" 1}
-         (word-count/word-count "one of each"))))
+(future-fact "count-multiple-occurrences"
+      (word-count "one fish two fish red fish blue fish") => {"one" 1 "fish" 4 "two" 1 "red" 1 "blue" 1})
 
-(deftest count-multiple-occurrences
-  (is (= {"one" 1 "fish" 4 "two" 1 "red" 1 "blue" 1}
-         (word-count/word-count "one fish two fish red fish blue fish"))))
+(future-fact "ignore-punctuation"
+      (word-count "car : carpet as java : javascript!!&@$%^&") => {"car" 1, "carpet" 1 "as" 1 "java" 1 "javascript" 1})
 
-(deftest ignore-punctuation
-  (is (= {"car" 1, "carpet" 1 "as" 1 "java" 1 "javascript" 1}
-         (word-count/word-count "car : carpet as java : javascript!!&@$%^&"))))
+(future-fact "include-numbers"
+      (word-count "testing, 1, 2 testing") => {"testing" 2 "1" 1 "2" 1})
 
-(deftest include-numbers
-  (is (= {"testing" 2 "1" 1 "2" 1}
-         (word-count/word-count "testing, 1, 2 testing"))))
+(future-fact "normalize-case"
+      (word-count "go Go GO") => {"go" 3})
 
-(deftest normalize-case
-  (is (= {"go" 3}
-         (word-count/word-count "go Go GO"))))
-
-(run-tests)
